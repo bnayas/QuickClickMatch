@@ -12,10 +12,10 @@ android/signing.properties
 android/app/upload-keystore.jks
 android/key.properties
 
-# Asset exports generated outside the Flutter bundle
-assets/deck*/
-assets/*.json
-assets/audio/
+# Asset exports generated outside the Flutter bundle (root-level only)
+/assets/deck*/
+/assets/*.json
+/assets/audio/
 
 # Backend service
 backend/.env
