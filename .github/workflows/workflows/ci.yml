@@ -1,0 +1,82 @@
+name: Flutter CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+env:
+  COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+  COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  BACKEND_ADDRESS: ${{ secrets.BACKEND_ADDRESS }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure pubspec.yaml changed
+        run: |
+          if ! git diff --name-only origin/${{ github.base_ref || 'master' }}...HEAD | grep -q "pubspec.yaml"; then
+            echo "pubspec.yaml version not updated in this PR."
+            exit 1
+          fi
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.3"
+          channel: "stable"
+
+      - name: Install dependencies
+        working-directory: quick_click_match
+        run: flutter pub get
+
+      - name: Analyze
+        working-directory: quick_click_match
+        run: |
+          flutter analyze
+          dart format --set-exit-if-changed .
+
+      - name: Run tests
+        working-directory: quick_click_match
+        run: flutter test
+
+      - name: Verify Android version matches pubspec
+        working-directory: quick_click_match
+        run: |
+          PUB_VERSION=$(grep -m1 '^version:' pubspec.yaml | awk '{print $2}')
+          NAME="${PUB_VERSION%%+*}"
+          CODE="${PUB_VERSION#*+}"
+          GRADLE_NAME=$(grep -m1 'versionName' android/app/build.gradle.kts | sed 's/[^0-9.]//g')
+          GRADLE_CODE=$(grep -m1 'versionCode' android/app/build.gradle.kts | sed 's/[^0-9]//g')
+          if [ "$NAME" != "$GRADLE_NAME" ] || [ "$CODE" != "$GRADLE_CODE" ]; then
+            echo "pubspec.yaml ($PUB_VERSION) does not match Gradle versionCode=$GRADLE_CODE, versionName=$GRADLE_NAME"
+            exit 1
+          fi
+
+      - name: Build Android app bundle
+        working-directory: quick_click_match
+        env:
+          COGNITO_USER_POOL_ID: ${{ env.COGNITO_USER_POOL_ID }}
+          COGNITO_CLIENT_ID: ${{ env.COGNITO_CLIENT_ID }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          BACKEND_ADDRESS: ${{ env.BACKEND_ADDRESS }}
+        run: |
+          flutter build appbundle --release \
+            --dart-define=COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --dart-define=COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
+            --dart-define=AWS_REGION=$AWS_REGION \
+            --dart-define=BACKEND_ADDRESS=$BACKEND_ADDRESS
+
+      - name: Upload app bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quick-click-match-aab
+          path: quick_click_match/build/app/outputs/bundle/release/app-release.aab
