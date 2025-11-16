@@ -25,8 +25,13 @@ jobs:
         run: |
           BASE_REF="${{ github.base_ref }}"
           if [ -n "$BASE_REF" ]; then
-            git fetch --depth=1 origin "$BASE_REF" >/dev/null 2>&1 || true
-            RANGE="origin/$BASE_REF...HEAD"
+            git fetch origin "$BASE_REF" >/dev/null 2>&1 || true
+            BASE_COMMIT=$(git merge-base HEAD "origin/$BASE_REF" || echo "")
+            if [ -z "$BASE_COMMIT" ]; then
+              echo "Unable to determine merge base with origin/$BASE_REF; skipping pubspec check."
+              exit 0
+            fi
+            RANGE="$BASE_COMMIT..HEAD"
           else
             if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
               RANGE="HEAD^..HEAD"
@@ -36,7 +41,7 @@ jobs:
             fi
           fi
 
-          if ! git diff --name-only $RANGE | grep -q "^flutter/pubspec.yaml$"; then
+          if ! git diff --name-only "$RANGE" | grep -q "^flutter/pubspec.yaml$"; then
             echo "flutter/pubspec.yaml version not updated in this change."
             exit 1
           fi
