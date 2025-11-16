@@ -24,7 +24,6 @@ jobs:
       - name: Ensure flutter/pubspec.yaml changed
         run: |
           BASE_REF="${{ github.base_ref }}"
-          DEFAULT_BRANCH="main"
           if [ -n "$BASE_REF" ]; then
             git fetch origin "$BASE_REF":"tmp-base-ref" >/dev/null 2>&1 || true
             RANGE="tmp-base-ref...HEAD"
@@ -32,12 +31,12 @@ jobs:
             if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
               RANGE="HEAD^..HEAD"
             else
-              echo "Single commit repository history; skipping pubspec check."
+              echo "Single commit history; skipping pubspec check."
               exit 0
             fi
           fi
 
-          if ! git diff --name-only $RANGE | grep -q '^flutter/pubspec.yaml$'; then
+          if ! git diff --name-only $RANGE | grep -q "^flutter/pubspec.yaml$"; then
             echo "flutter/pubspec.yaml version not updated in this change."
             exit 1
           fi
@@ -45,7 +44,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.3"
+          flutter-version: "3.29.3"
           channel: "stable"
 
       - name: Install dependencies
@@ -83,7 +82,11 @@ jobs:
           AWS_REGION: ${{ env.AWS_REGION }}
           BACKEND_ADDRESS: ${{ env.BACKEND_ADDRESS }}
         run: |
-          flutter build appbundle --release             --dart-define=COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID             --dart-define=COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID             --dart-define=AWS_REGION=$AWS_REGION             --dart-define=BACKEND_ADDRESS=$BACKEND_ADDRESS
+          flutter build appbundle --release \
+            --dart-define=COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --dart-define=COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
+            --dart-define=AWS_REGION=$AWS_REGION \
+            --dart-define=BACKEND_ADDRESS=$BACKEND_ADDRESS
 
       - name: Upload app bundle artifact
         uses: actions/upload-artifact@v4
