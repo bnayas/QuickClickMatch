@@ -1,7 +1,7 @@
 name: quick_click_match
 description: Fast-paced deck matching game built for online + local multiplayer
 publish_to: 'none'
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

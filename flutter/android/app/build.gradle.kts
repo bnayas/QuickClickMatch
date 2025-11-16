@@ -58,8 +58,8 @@ android {
         applicationId = "com.steinmetzbnaya.quickclickmatch"
         minSdk = 24
         targetSdk = 33
-        versionCode = flutterVersionCode ?: 2
-        versionName = flutterVersionName ?: "1.0.1"
+        versionCode = flutterVersionCode ?: 3
+        versionName = flutterVersionName ?: "1.0.2"
 
         // --- CRITICAL: MultiDex is ENABLED in the default config ---
         multiDexEnabled = true
