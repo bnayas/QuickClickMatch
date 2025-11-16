@@ -29,10 +29,7 @@ jobs:
             git fetch origin "$BASE_REF":"tmp-base-ref" >/dev/null 2>&1 || true
             RANGE="tmp-base-ref...HEAD"
           else
-            git fetch origin "$DEFAULT_BRANCH":"tmp-default" >/dev/null 2>&1 || true
-            if git rev-parse --verify tmp-default >/dev/null 2>&1; then
-              RANGE="tmp-default...HEAD"
-            elif git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
               RANGE="HEAD^..HEAD"
             else
               echo "Single commit repository history; skipping pubspec check."
