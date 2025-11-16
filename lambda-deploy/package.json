@@ -1,0 +1,11 @@
+{
+  "name": "cognito-post-confirmation-profile",
+  "version": "1.0.0",
+  "description": "Writes user profile to DynamoDB after Cognito confirmation.",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.504.0",
+    "@aws-sdk/lib-dynamodb": "^3.504.0"
+  }
+}

@@ -1,0 +1,4 @@
+storeFile=/absolute/path/to/quick_click_match_release_key.jks
+storePassword=change-me
+keyAlias=quickclickmatch
+keyPassword=change-me

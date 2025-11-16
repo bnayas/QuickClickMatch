@@ -1,0 +1,98 @@
+.env 
+assets/*.json
+assets/deck*/
+*.png
+*.jpg
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub/
+build/
+
+# Web related
+web/.dart_tool/
+web/build/
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+*.iml
+
+# Flutter generated
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+
+# Misc
+*.log
+
+# Android
+android/.gradle/
+android/captures/
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/key.properties
+
+# Signing keys
+*.jks
+android/signing.properties
+
+# iOS
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/build/
+
+# macOS
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/build/
+
+# Linux
+linux/flutter/ephemeral/
+linux/build/
+
+# Windows
+windows/flutter/ephemeral/
+windows/build/
+
+# Asset bundling
+assets/.DS_Store
+
+android/app/upload-keystore.jks
+android/key.properties
+
+flutter_release.sh

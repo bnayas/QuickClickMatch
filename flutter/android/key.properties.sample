@@ -1,0 +1,6 @@
+# Copy this file to key.properties (outside source control) and fill in the secrets
+# storeFile should point to the absolute path of your release keystore on disk.
+storeFile=/absolute/path/to/quick_click_match.keystore
+storePassword=CHANGE_ME_STORE_PASSWORD
+keyAlias=quick_click_match
+keyPassword=CHANGE_ME_KEY_PASSWORD

@@ -1,0 +1,13 @@
+{
+  "name": "cards-matching-game-backend",
+  "version": "1.0.0",
+  "description": "Backend for the cards matching game",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "seedrandom": "^3.0.5",
+    "ws": "^8.0.0"
+  }
+}
