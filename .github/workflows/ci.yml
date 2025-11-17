@@ -72,8 +72,8 @@ jobs:
           PUB_VERSION=$(grep -m1 '^version:' pubspec.yaml | awk '{print $2}')
           NAME="${PUB_VERSION%%+*}"
           CODE="${PUB_VERSION#*+}"
-          GRADLE_NAME=$(grep -m1 'versionName' android/app/build.gradle.kts | sed 's/[^0-9.]//g')
-          GRADLE_CODE=$(grep -m1 'versionCode' android/app/build.gradle.kts | sed 's/[^0-9]//g')
+          GRADLE_NAME=$(grep -m1 'versionName =' android/app/build.gradle.kts | sed 's/[^0-9.]//g')
+          GRADLE_CODE=$(grep -m1 'versionCode =' android/app/build.gradle.kts | sed 's/[^0-9]//g')
           if [ "$NAME" != "$GRADLE_NAME" ] || [ "$CODE" != "$GRADLE_CODE" ]; then
             echo "pubspec.yaml ($PUB_VERSION) does not match Gradle versionCode=$GRADLE_CODE, versionName=$GRADLE_NAME"
             exit 1
