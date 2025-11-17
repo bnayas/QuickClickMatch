@@ -78,12 +78,12 @@ jobs:
             echo "ANDROID_KEYSTORE_B64 secret is not set."
             exit 1
           fi
-          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > app/release-key.jks
+          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > release-key.jks
           cat <<EOF > key.properties
           storePassword=$ANDROID_KEYSTORE_PASSWORD
           keyPassword=$ANDROID_KEY_PASSWORD
           keyAlias=$ANDROID_KEY_ALIAS
-          storeFile=app/release-key.jks
+          storeFile=release-key.jks
           EOF
 
       - name: Verify Android version matches pubspec
