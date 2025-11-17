@@ -66,6 +66,26 @@ jobs:
         working-directory: flutter
         run: flutter test
 
+      - name: Prepare release keystore
+        working-directory: flutter/android
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_B64" ]; then
+            echo "ANDROID_KEYSTORE_B64 secret is not set."
+            exit 1
+          fi
+          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > app/release-key.jks
+          cat <<EOF > key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=app/release-key.jks
+          EOF
+
       - name: Verify Android version matches pubspec
         working-directory: flutter
         run: |
