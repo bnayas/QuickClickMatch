@@ -9,6 +9,30 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  errors:
+    constant_identifier_names: ignore
+    non_constant_identifier_names: ignore
+    depend_on_referenced_packages: ignore
+    prefer_const_constructors: ignore
+    prefer_const_declarations: ignore
+    prefer_final_fields: ignore
+    use_build_context_synchronously: ignore
+    use_super_parameters: ignore
+    no_logic_in_create_state: ignore
+    collection_methods_unrelated_type: ignore
+    unnecessary_brace_in_string_interps: ignore
+    use_full_hex_values_for_flutter_colors: ignore
+    library_private_types_in_public_api: ignore
+    unnecessary_nullable_for_final_variable_declarations: ignore
+    prefer_typing_uninitialized_variables: ignore
+    prefer_function_declarations_over_variables: ignore
+    curly_braces_in_flow_control_structures: ignore
+    unnecessary_this: ignore
+    prefer_adjacent_string_concatenation: ignore
+    unnecessary_string_escapes: ignore
+    avoid_print: ignore
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`

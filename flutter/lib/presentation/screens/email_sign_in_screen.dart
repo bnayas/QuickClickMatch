@@ -129,6 +129,7 @@ class _EmailSignInScreenState extends State<EmailSignInScreen> {
           }))),
         );
         await GameService().disconnectMultiplayer();
+        if (!mounted) return;
         Navigator.pop(context, true);
         Navigator.pop(context, true);
       }
