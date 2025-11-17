@@ -5,4 +5,4 @@ int modInv(int a, int q) {
     if ((a * i) % q == 1) return i;
   }
   throw Exception("No modular inverse for $a mod $q");
-} 
+}

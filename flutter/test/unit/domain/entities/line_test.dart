@@ -11,4 +11,4 @@ void main() {
     final result = line.contains(p, q);
     expect(result, isA<bool>());
   });
-} 
+}

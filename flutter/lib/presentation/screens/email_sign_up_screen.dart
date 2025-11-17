@@ -139,8 +139,7 @@ class _EmailSignUpScreenState extends State<EmailSignUpScreen> {
                     if (value.length < 3) {
                       return l10n.t('emailSignUp.displayNameError.length');
                     }
-                    if (value.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-                    }
+                    if (value.contains(RegExp(r'[^a-zA-Z0-9]'))) {}
                     if (value.contains('@')) {
                       return l10n.t('emailSignUp.displayNameError.atSymbol');
                     }

@@ -11,4 +11,4 @@ class Point {
 
   @override
   String toString() => '([1m$x,$y,$z[0m)';
-} 
+}

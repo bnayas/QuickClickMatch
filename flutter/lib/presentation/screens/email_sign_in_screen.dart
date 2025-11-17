@@ -53,19 +53,18 @@ class _EmailSignInScreenState extends State<EmailSignInScreen> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(l10n.t('emailSignIn.dialog.updateDisplayName.title')),
-        content: Text(l10n.format(
-            'emailSignIn.dialog.updateDisplayName.body',
+        content: Text(l10n.format('emailSignIn.dialog.updateDisplayName.body',
             {'candidate': newName, 'current': existingName})),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'keep'),
-            child: Text(l10n.format(
-                'emailSignIn.dialog.keep', {'current': existingName})),
+            child: Text(l10n
+                .format('emailSignIn.dialog.keep', {'current': existingName})),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, 'aws'),
-            child: Text(l10n
-                .format('emailSignIn.dialog.use', {'candidate': newName})),
+            child: Text(
+                l10n.format('emailSignIn.dialog.use', {'candidate': newName})),
           ),
         ],
       ),

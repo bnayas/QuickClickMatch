@@ -259,7 +259,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                       height: _currentPage == index ? 14 : 10,
                                       decoration: BoxDecoration(
                                         color: Colors.white.withValues(
-                                          alpha: _currentPage == index ? 1 : 0.5,
+                                          alpha:
+                                              _currentPage == index ? 1 : 0.5,
                                         ),
                                         shape: BoxShape.circle,
                                       ),
@@ -369,8 +370,7 @@ class _MenuScreenState extends State<MenuScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white
-            .withValues(alpha: enabled ? 0.9 : 0.4),
+        color: Colors.white.withValues(alpha: enabled ? 0.9 : 0.4),
         borderRadius: BorderRadius.circular(24),
       ),
       child: IconButton(
