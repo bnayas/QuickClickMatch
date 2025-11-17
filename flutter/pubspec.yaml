@@ -24,7 +24,6 @@ dependencies:
     sdk: flutter
   path_provider: ^2.1.1
   archive: any
-  image: ^3.0.1
   shared_preferences: ^2.1.1
   flutter_secure_storage: ^9.0.0
   confetti: ^0.6.0
