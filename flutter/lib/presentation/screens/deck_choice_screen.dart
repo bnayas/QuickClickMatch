@@ -34,6 +34,8 @@ class DeckPreview {
 }
 
 class DeckChoiceScreen extends StatefulWidget {
+  const DeckChoiceScreen({Key? key}) : super(key: key);
+
   @override
   _DeckChoiceScreen createState() => _DeckChoiceScreen();
 }

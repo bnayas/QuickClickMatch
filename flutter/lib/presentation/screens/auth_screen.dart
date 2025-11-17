@@ -69,10 +69,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           navigator.pop(true);
                         }
                       },
-                      child: Text(l10n.t('auth.signInWithEmail')),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
                       ),
+                      child: Text(l10n.t('auth.signInWithEmail')),
                     ),
                   ],
                 ),
