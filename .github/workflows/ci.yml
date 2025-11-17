@@ -78,13 +78,16 @@ jobs:
             echo "ANDROID_KEYSTORE_B64 secret is not set."
             exit 1
           fi
-          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > release-key.jks
+          mkdir -p app
+          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > app/release-key.jks
+          ls -l app/release-key.jks
           cat <<EOF > key.properties
           storePassword=$ANDROID_KEYSTORE_PASSWORD
           keyPassword=$ANDROID_KEY_PASSWORD
           keyAlias=$ANDROID_KEY_ALIAS
           storeFile=release-key.jks
           EOF
+          cat key.properties
 
       - name: Verify Android version matches pubspec
         working-directory: flutter
