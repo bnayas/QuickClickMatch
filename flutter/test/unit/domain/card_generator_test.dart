@@ -20,4 +20,4 @@ void main() {
     expect(card1.every((n) => n >= 1 && n <= 30), isTrue);
     expect(card2.every((n) => n >= 1 && n <= 30), isTrue);
   });
-} 
+}

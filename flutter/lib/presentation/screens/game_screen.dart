@@ -11,7 +11,6 @@ import 'screens_factory.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../../utils/deck_config.dart';
 import 'package:quick_click_match/infra/platform/file_manager_factory.dart';
-import 'package:image/image.dart' as img;
 import 'package:quick_click_match/presentation/widgets/image_data.dart';
 import 'package:quick_click_match/services/game_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -378,7 +377,7 @@ abstract class GameScreenState extends State<GameScreen> {
       return;
     }
 
-    if (imageData.image != null) {
+    if (imageData.bytes != null) {
       _loadedImagePaths.add(imageData.src);
       return;
     }
@@ -387,6 +386,7 @@ abstract class GameScreenState extends State<GameScreen> {
     debugLog('[GameScreen] Starting to load image: ${imageData.src}');
 
     try {
+      Uint8List bytes;
       final fileManager = FileManagerFactory.create();
 
       if (deckConfig.inAssets) {
@@ -394,8 +394,7 @@ abstract class GameScreenState extends State<GameScreen> {
             ? imageData.src.substring(1)
             : imageData.src;
         final ByteData byteData = await rootBundle.load(path);
-        final Uint8List bytes = byteData.buffer.asUint8List();
-        imageData.image = img.decodeImage(bytes);
+        bytes = byteData.buffer.asUint8List();
       } else {
         final logMessage =
             '[GameScreen] Storage deck image load via FileManager: "${imageData.src}"';
@@ -403,9 +402,10 @@ abstract class GameScreenState extends State<GameScreen> {
         // ignore: avoid_print
         debugLog(logMessage);
         final rawData = await fileManager.readImage(imageData.src);
-        imageData.image = img.decodeImage(Uint8List.fromList(rawData));
+        bytes = Uint8List.fromList(rawData);
       }
 
+      imageData.bytes = bytes;
       _loadedImagePaths.add(imageData.src);
       _loadingImagePaths.remove(imageData.src);
 

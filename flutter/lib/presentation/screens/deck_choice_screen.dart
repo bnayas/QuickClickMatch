@@ -34,6 +34,8 @@ class DeckPreview {
 }
 
 class DeckChoiceScreen extends StatefulWidget {
+  const DeckChoiceScreen({Key? key}) : super(key: key);
+
   @override
   _DeckChoiceScreen createState() => _DeckChoiceScreen();
 }
@@ -665,8 +667,8 @@ class _DeckChoiceScreen extends State<DeckChoiceScreen> {
                           ),
                           shadows: [
                             BoxShadow(
-                              color:
-                                  Colors.deepPurpleAccent.withValues(alpha: 0.15),
+                              color: Colors.deepPurpleAccent
+                                  .withValues(alpha: 0.15),
                               blurRadius: 22,
                               offset: const Offset(0, 10),
                             ),

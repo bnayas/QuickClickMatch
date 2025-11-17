@@ -60,19 +60,19 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(height: 16),
                     ],
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.emailSignIn)
-                            .then((result) {
-                          if (!mounted) return;
-                          if (result == true) {
-                            Navigator.pop(context, true);
-                          }
-                        });
+                      onPressed: () async {
+                        final navigator = Navigator.of(context);
+                        final result =
+                            await navigator.pushNamed(AppRoutes.emailSignIn);
+                        if (!mounted) return;
+                        if (result == true) {
+                          navigator.pop(true);
+                        }
                       },
-                      child: Text(l10n.t('auth.signInWithEmail')),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
                       ),
+                      child: Text(l10n.t('auth.signInWithEmail')),
                     ),
                   ],
                 ),

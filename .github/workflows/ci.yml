@@ -24,20 +24,24 @@ jobs:
       - name: Ensure flutter/pubspec.yaml changed
         run: |
           BASE_REF="${{ github.base_ref }}"
-          DEFAULT_BRANCH="main"
           if [ -n "$BASE_REF" ]; then
-            git fetch origin "$BASE_REF":"tmp-base-ref" >/dev/null 2>&1 || true
-            RANGE="tmp-base-ref...HEAD"
+            git fetch origin "$BASE_REF" >/dev/null 2>&1 || true
+            BASE_COMMIT=$(git merge-base HEAD "origin/$BASE_REF" || echo "")
+            if [ -z "$BASE_COMMIT" ]; then
+              echo "Unable to determine merge base with origin/$BASE_REF; skipping pubspec check."
+              exit 0
+            fi
+            RANGE="$BASE_COMMIT..HEAD"
           else
             if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
               RANGE="HEAD^..HEAD"
             else
-              echo "Single commit repository history; skipping pubspec check."
+              echo "Single commit history; skipping pubspec check."
               exit 0
             fi
           fi
 
-          if ! git diff --name-only $RANGE | grep -q '^flutter/pubspec.yaml$'; then
+          if ! git diff --name-only "$RANGE" | grep -q "^flutter/pubspec.yaml$"; then
             echo "flutter/pubspec.yaml version not updated in this change."
             exit 1
           fi
@@ -45,7 +49,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.3"
+          flutter-version: "3.29.3"
           channel: "stable"
 
       - name: Install dependencies
@@ -62,14 +66,47 @@ jobs:
         working-directory: flutter
         run: flutter test
 
+      - name: Verify required env vars are set
+        run: |
+          for VAR in COGNITO_USER_POOL_ID COGNITO_CLIENT_ID AWS_REGION BACKEND_ADDRESS; do
+            if [ -z "${!VAR}" ]; then
+              echo "::error::$VAR is empty"
+              exit 1
+            fi
+            echo "$VAR=***"
+          done
+
+      - name: Prepare release keystore
+        working-directory: flutter/android
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_B64" ]; then
+            echo "ANDROID_KEYSTORE_B64 secret is not set."
+            exit 1
+          fi
+          mkdir -p app
+          echo "$ANDROID_KEYSTORE_B64" | base64 --decode > app/release-key.jks
+          ls -l app/release-key.jks
+          cat <<EOF > key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=release-key.jks
+          EOF
+          cat key.properties
+
       - name: Verify Android version matches pubspec
         working-directory: flutter
         run: |
           PUB_VERSION=$(grep -m1 '^version:' pubspec.yaml | awk '{print $2}')
           NAME="${PUB_VERSION%%+*}"
           CODE="${PUB_VERSION#*+}"
-          GRADLE_NAME=$(grep -m1 'versionName' android/app/build.gradle.kts | sed 's/[^0-9.]//g')
-          GRADLE_CODE=$(grep -m1 'versionCode' android/app/build.gradle.kts | sed 's/[^0-9]//g')
+          GRADLE_NAME=$(grep -m1 'versionName =' android/app/build.gradle.kts | sed 's/[^0-9.]//g')
+          GRADLE_CODE=$(grep -m1 'versionCode =' android/app/build.gradle.kts | sed 's/[^0-9]//g')
           if [ "$NAME" != "$GRADLE_NAME" ] || [ "$CODE" != "$GRADLE_CODE" ]; then
             echo "pubspec.yaml ($PUB_VERSION) does not match Gradle versionCode=$GRADLE_CODE, versionName=$GRADLE_NAME"
             exit 1
@@ -83,7 +120,11 @@ jobs:
           AWS_REGION: ${{ env.AWS_REGION }}
           BACKEND_ADDRESS: ${{ env.BACKEND_ADDRESS }}
         run: |
-          flutter build appbundle --release             --dart-define=COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID             --dart-define=COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID             --dart-define=AWS_REGION=$AWS_REGION             --dart-define=BACKEND_ADDRESS=$BACKEND_ADDRESS
+          flutter build appbundle --release \
+            --dart-define=COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+            --dart-define=COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
+            --dart-define=AWS_REGION=$AWS_REGION \
+            --dart-define=BACKEND_ADDRESS=$BACKEND_ADDRESS
 
       - name: Upload app bundle artifact
         uses: actions/upload-artifact@v4

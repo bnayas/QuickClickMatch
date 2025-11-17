@@ -1,7 +1,7 @@
 name: quick_click_match
 description: Fast-paced deck matching game built for online + local multiplayer
 publish_to: 'none'
-version: 1.0.2+4
+version: 1.0.2+5
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -24,7 +24,6 @@ dependencies:
     sdk: flutter
   path_provider: ^2.1.1
   archive: any
-  image: ^3.0.1
   shared_preferences: ^2.1.1
   flutter_secure_storage: ^9.0.0
   confetti: ^0.6.0
@@ -43,6 +42,7 @@ dev_dependencies:
   web : ^1.1.1
   flutter_test:
     sdk: flutter
+  flutter_lints: ^3.0.0
   mockito: ^5.4.2
   build_runner: ^2.4.7
   idb_shim: ^2.2.0

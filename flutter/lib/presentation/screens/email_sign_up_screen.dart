@@ -48,18 +48,16 @@ class _EmailSignUpScreenState extends State<EmailSignUpScreen> {
         _displayNameController.text.trim(),
       );
 
-      if (mounted) {
-        // Success: Navigate to sign-in screen
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(l10n.t('emailSignUp.snackbar.success'))),
-        );
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoutes.emailConfirmation,
-          arguments: primaryUsername,
-        );
-      }
+      if (!mounted) return;
+      // Success: Navigate to sign-in screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.t('emailSignUp.snackbar.success'))),
+      );
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.emailConfirmation,
+        arguments: primaryUsername,
+      );
     } on CognitoUsernameExistsException {
       if (mounted) {
         // Handle: Email already exists (AliasExistsException in Cognito)
@@ -67,6 +65,7 @@ class _EmailSignUpScreenState extends State<EmailSignUpScreen> {
           _errorMessage = l10n.t('emailSignUp.error.accountExists');
         });
         await Future.delayed(const Duration(milliseconds: 1500));
+        if (!mounted) return;
         Navigator.pushReplacementNamed(
           context,
           AppRoutes.emailSignIn,
@@ -140,8 +139,7 @@ class _EmailSignUpScreenState extends State<EmailSignUpScreen> {
                     if (value.length < 3) {
                       return l10n.t('emailSignUp.displayNameError.length');
                     }
-                    if (value.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-                    }
+                    if (value.contains(RegExp(r'[^a-zA-Z0-9]'))) {}
                     if (value.contains('@')) {
                       return l10n.t('emailSignUp.displayNameError.atSymbol');
                     }

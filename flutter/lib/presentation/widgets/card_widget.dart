@@ -4,7 +4,6 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:quick_click_match/presentation/widgets/card_shape_utils.dart';
 import '../../utils/deck_config.dart';
-import 'package:image/image.dart' as img;
 import 'dart:typed_data';
 import 'package:quick_click_match/utils/debug_logger.dart';
 
@@ -62,7 +61,8 @@ class CardWidget extends StatelessWidget {
     }
 
     // Check if card image is loaded
-    final bool isImageLoaded = cardImageData?.image != null;
+    final Uint8List? cardBytes = cardImageData?.bytes;
+    final bool isImageLoaded = cardBytes != null;
     debugLog('CardWidget: highlightWrongSymbolId:$highlightWrongSymbolId');
     if (highlightWrongSymbolId != null)
       for (final symbol in cardData.symbols!) {
@@ -163,18 +163,11 @@ class CardWidget extends StatelessWidget {
               // Display the pre-rendered card image
               Positioned.fill(
                 child: clipCardChild(
-                  config.inAssets
-                      ? Image.asset(
-                          'assets/${cardData.src}',
-                          fit: BoxFit.contain,
-                        )
-                      : Image.memory(
-                          Uint8List.fromList(
-                            img.encodePng(
-                                cardImageData?.image ?? img.Image(1, 1)),
-                          ),
-                          fit: BoxFit.contain,
-                        ),
+                  Image.memory(
+                    cardBytes,
+                    fit: BoxFit.contain,
+                    gaplessPlayback: true,
+                  ),
                 ),
               ),
 

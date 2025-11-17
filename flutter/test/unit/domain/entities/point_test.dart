@@ -8,4 +8,4 @@ void main() {
     expect(p1, equals(p2));
     expect(p1.hashCode, equals(p2.hashCode));
   });
-} 
+}

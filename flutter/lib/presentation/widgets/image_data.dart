@@ -1,33 +1,27 @@
 // image_data.dart
-import 'package:image/image.dart' as img;
-
+import 'dart:typed_data';
 
 class ImageData {
   final String id;
   final String src;
   final List<PointData> contour;
-  img.Image? image;
-  ImageData({
-    required this.id,
-    required this.src,
-    required this.contour,
-    this.image
-  });
+  Uint8List? bytes;
+  ImageData(
+      {required this.id, required this.src, required this.contour, this.bytes});
 
   // Add a copyWith method for partial updates
-  ImageData copyWith({
-    String? id,
-    String? src,
-    List<PointData>? contour,
-    img.Image? imageBytes
-  }) {
+  ImageData copyWith(
+      {String? id,
+      String? src,
+      List<PointData>? contour,
+      Uint8List? bytes}) {
     return ImageData(
-      id: id ?? this.id,
-      src: src ?? this.src,
-      contour: contour ?? this.contour,
-      image : image ?? this.image
-    );
+        id: id ?? this.id,
+        src: src ?? this.src,
+        contour: contour ?? this.contour,
+        bytes: bytes ?? this.bytes);
   }
+
   factory ImageData.fromJson(Map<String, dynamic> json) {
     return ImageData(
       id: json['id'],
@@ -35,7 +29,7 @@ class ImageData {
       contour: (json['contour'] as List)
           .map((pt) => PointData.fromJson(pt))
           .toList(),
-   );
+    );
   }
 }
 
@@ -50,4 +44,4 @@ class PointData {
       y: (json['y'] as num).toDouble(),
     );
   }
-} 
+}

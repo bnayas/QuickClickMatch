@@ -1046,7 +1046,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
             padding: EdgeInsets.only(bottom: bottomInset),
             child: AlertDialog(
               scrollable: true,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               title: Text(_t('lobby.findFriend.title')),
               content: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -1074,7 +1075,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     const SizedBox(height: 8),
                     Text(
                       _t('lobby.findFriend.note'),
-                      style: const TextStyle(fontSize: 12, color: Colors.orange),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.orange),
                     ),
                   ],
                 ),

@@ -46,6 +46,7 @@ Future<List<String>> fetchFileList() async {
 
 Future<String?> showFilePickerDialog(BuildContext context) async {
   final files = await fetchFileList();
+  if (!context.mounted) return null;
   final l10n = LocalizationService.instance;
 
   return showDialog<String>(

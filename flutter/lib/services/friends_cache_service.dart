@@ -100,8 +100,7 @@ class FriendsCacheService {
       activeFriends.where((f) => f.wasRecentlyOnline).toList();
 
   @visibleForTesting
-  void setDocumentsDirectoryProvider(
-      DocumentsDirectoryProvider? provider) {
+  void setDocumentsDirectoryProvider(DocumentsDirectoryProvider? provider) {
     _documentsDirectoryProvider = provider;
   }
 
